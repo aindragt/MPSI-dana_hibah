@@ -525,11 +525,69 @@
 
 ---
 
+### T-021: Verifikasi & Konfigurasi Verifikasi Email
+
+**Fase:** 1 — Autentikasi & Role
+**Dependensi:** T-015
+**Rujukan:** US-AUTH-02 (Verifikasi email + aktivasi akun)
+
+**Yang harus dikerjakan:**
+1. Pastikan model `User` implement interface `MustVerifyEmail` (`implements MustVerifyEmail` di class declaration).
+2. Pastikan middleware `verified` diterapkan ke **semua** route group yang butuh akun aktif — yaitu route group Pengaju (`role:pengaju`), Admin Kesra (`role:admin-kesra`), dan Super Admin (`role:super_admin`) di `routes/web.php`. Cek bahwa middleware ditulis `['auth', 'verified']`, bukan hanya `['auth']`.
+3. Pastikan halaman `VerifyEmail.vue` bawaan Breeze berfungsi: user baru yang belum verifikasi harus diarahkan ke halaman ini saat mencoba akses route terproteksi.
+4. Pastikan link verifikasi di email (atau di log jika `MAIL_MAILER=log`) bisa diklik dan mengisi `email_verified_at` di database.
+5. Pastikan user yang sudah verifikasi bisa akses dashboard tanpa hambatan.
+
+**File yang terlibat:**
+- `app/Models/User.php` (modify — pastikan `implements MustVerifyEmail`)
+- `routes/web.php` (modify — pastikan `'verified'` ada di middleware group)
+- `resources/js/Pages/Auth/VerifyEmail.vue` (verifikasi tampil dengan benar)
+
+**Kriteria Selesai:**
+- [ ] User baru daftar → diarahkan ke halaman "Verifikasi Email" jika belum verifikasi
+- [ ] User yang belum verifikasi TIDAK BISA akses halaman dashboard (redirect ke halaman verifikasi)
+- [ ] Setelah klik link verifikasi (via email log atau Mailtrap) → `email_verified_at` terisi di database
+- [ ] User yang sudah verifikasi → bisa akses dashboard tanpa masalah
+
+**Status:** ⬜ Belum Dikerjakan
+
+---
+
+### T-022: Test & Verifikasi Alur Reset Password
+
+**Fase:** 1 — Autentikasi & Role
+**Dependensi:** T-015, T-006
+**Rujukan:** US-AUTH-04 (Reset password)
+
+**Yang harus dikerjakan:**
+1. Pastikan route `forgot-password` dan `reset-password` bawaan Breeze masih berfungsi setelah model `User` dimodifikasi dengan field custom (`role_id`, `nama_ketua`, dll). Buka halaman `ForgotPassword.vue` dan `ResetPassword.vue` — pastikan tidak error karena perubahan skema `users`.
+2. Test manual: isi form "Lupa Password" dengan email valid → link reset terkirim (cek di log jika `MAIL_MAILER=log`).
+3. Buat 1 Feature Test: `tests/Feature/Auth/PasswordResetTest.php` dengan minimal 3 test case:
+   - Test kirim link reset password ke email valid → response sukses, notification terkirim.
+   - Test reset password dengan token valid → password berubah, user bisa login dengan password baru.
+   - Test reset password dengan token invalid/expired → ditolak, password tidak berubah.
+4. Gunakan `RefreshDatabase` trait dan seed roles di `setUp()`.
+
+**File yang terlibat:**
+- `tests/Feature/Auth/PasswordResetTest.php` (baru)
+- `resources/js/Pages/Auth/ForgotPassword.vue` (verifikasi tidak error)
+- `resources/js/Pages/Auth/ResetPassword.vue` (verifikasi tidak error)
+
+**Kriteria Selesai:**
+- [ ] Form "Lupa Password" berhasil mengirim email/link reset (tercatat di log jika `MAIL_MAILER=log`)
+- [ ] Reset password dengan token valid berhasil mengubah password di database
+- [ ] Reset password dengan token invalid/expired → ditolak
+- [ ] `php artisan test --filter=PasswordResetTest` — semua lulus
+
+**Status:** ⬜ Belum Dikerjakan
+
+---
+
 ## Fase 2 — State Machine Proposal
 
 ---
 
-### T-021: Buat Base State Class + 7 Concrete State Classes
+### T-023: Buat Base State Class + 7 Concrete State Classes
 
 **Fase:** 2 — State Machine Proposal
 **Dependensi:** T-002, T-013
@@ -559,10 +617,10 @@
 
 ---
 
-### T-022: Konfigurasi Model Proposal dengan HasStates
+### T-024: Konfigurasi Model Proposal dengan HasStates
 
 **Fase:** 2 — State Machine Proposal
-**Dependensi:** T-021
+**Dependensi:** T-023
 **Rujukan:** DEC-06, AGENTS.md bagian 4.3
 
 **Yang harus dikerjakan:**
@@ -582,10 +640,10 @@
 
 ---
 
-### T-023: Buat ProposalObserver untuk Audit Trail Otomatis
+### T-025: Buat ProposalObserver untuk Audit Trail Otomatis
 
 **Fase:** 2 — State Machine Proposal
-**Dependensi:** T-022
+**Dependensi:** T-024
 **Rujukan:** DEC-05 (Audit trail), ARCHITECTURE.md bagian 4.3
 
 **Yang harus dikerjakan:**
@@ -606,10 +664,10 @@
 
 ---
 
-### T-024: Buat Vue Composable `useProposalStatus`
+### T-026: Buat Vue Composable `useProposalStatus`
 
 **Fase:** 2 — State Machine Proposal
-**Dependensi:** T-021
+**Dependensi:** T-023
 **Rujukan:** ARCHITECTURE.md bagian 2.2 (Composables)
 
 **Yang harus dikerjakan:**
@@ -633,10 +691,10 @@
 
 ---
 
-### T-025: Buat ProposalPolicy
+### T-027: Buat ProposalPolicy
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-022
+**Dependensi:** T-024
 **Rujukan:** AGENTS.md bagian 4.2 (skeleton Policy), ARCHITECTURE.md bagian 5.6
 
 **Yang harus dikerjakan:**
@@ -656,10 +714,10 @@
 
 ---
 
-### T-026: Buat ProposalService (Generate Nomor + Cek Jendela)
+### T-028: Buat ProposalService (Generate Nomor + Cek Jendela)
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-022, T-008
+**Dependensi:** T-024, T-008
 **Rujukan:** US-PROP-09, US-PROP-10, US-PROP-11
 
 **Yang harus dikerjakan:**
@@ -680,10 +738,10 @@
 
 ---
 
-### T-027: Buat ProposalController — Index + Create + Store
+### T-029: Buat ProposalController — Index + Create + Store
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-025, T-026, T-019
+**Dependensi:** T-027, T-028, T-019
 **Rujukan:** US-PROP-01, US-PROP-02, US-PROP-09, US-PROP-10
 
 **Yang harus dikerjakan:**
@@ -708,16 +766,16 @@
 
 ---
 
-### T-028: Buat Halaman Vue — Proposal Index + Create
+### T-030: Buat Halaman Vue — Proposal Index + Create
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-027, T-024
+**Dependensi:** T-029, T-026
 **Rujukan:** US-PROP-01, US-PROP-07
 
 **Yang harus dikerjakan:**
 1. Buat `Pages/Pengaju/Proposals/Index.vue`: tabel daftar proposal sendiri dengan kolom: nomor, judul, status (badge), tanggal, aksi.
 2. Buat `Pages/Pengaju/Proposals/Create.vue`: form input: judul kegiatan, deskripsi, total anggaran, tanggal mulai/selesai pelaksanaan.
-3. Gunakan `StatusBadge` component dari T-024.
+3. Gunakan `StatusBadge` component dari T-026.
 
 **File yang terlibat:**
 - `resources/js/Pages/Pengaju/Proposals/Index.vue` (baru)
@@ -732,10 +790,10 @@
 
 ---
 
-### T-029: Buat ProposalController — Show + Edit + Update
+### T-031: Buat ProposalController — Show + Edit + Update
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-027
+**Dependensi:** T-029
 **Rujukan:** US-PROP-02, US-PROP-04, US-PROP-06
 
 **Yang harus dikerjakan:**
@@ -756,10 +814,10 @@
 
 ---
 
-### T-030: Buat Halaman Vue — Proposal Show + Edit
+### T-032: Buat Halaman Vue — Proposal Show + Edit
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-029
+**Dependensi:** T-031
 **Rujukan:** US-PROP-04, US-PROP-06
 
 **Yang harus dikerjakan:**
@@ -780,7 +838,7 @@
 
 ---
 
-### T-031: Buat FileController (Serve File Privat)
+### T-033: Buat FileController (Serve File Privat)
 
 **Fase:** 3 — Manajemen Proposal
 **Dependensi:** T-013
@@ -807,10 +865,10 @@
 
 ---
 
-### T-032: Buat DocumentUploadController + Upload Dokumen Proposal
+### T-034: Buat DocumentUploadController + Upload Dokumen Proposal
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-031, T-011
+**Dependensi:** T-033, T-011
 **Rujukan:** US-PROP-03, DEC-07 (Disk privat), DEC-08 (Versioning permanen)
 
 **Yang harus dikerjakan:**
@@ -835,10 +893,10 @@
 
 ---
 
-### T-033: Buat Komponen Vue FileUpload + Integrasi di Show Proposal
+### T-035: Buat Komponen Vue FileUpload + Integrasi di Show Proposal
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-032, T-030
+**Dependensi:** T-034, T-032
 **Rujukan:** US-PROP-03, US-PROP-04
 
 **Yang harus dikerjakan:**
@@ -858,10 +916,10 @@
 
 ---
 
-### T-034: Implementasi Submit Proposal (Draft → Diajukan)
+### T-036: Implementasi Submit Proposal (Draft → Diajukan)
 
 **Fase:** 3 — Manajemen Proposal
-**Dependensi:** T-032, T-022
+**Dependensi:** T-034, T-024
 **Rujukan:** US-PROP-05 (Submit hanya jika 11 dokumen lengkap), US-VER-08 (Resubmit)
 
 **Yang harus dikerjakan:**
@@ -888,7 +946,7 @@
 
 ---
 
-### T-035: Buat SubmissionWindowController + CRUD
+### T-037: Buat SubmissionWindowController + CRUD
 
 **Fase:** 4 — Manajemen Jendela Pengajuan
 **Dependensi:** T-019
@@ -913,10 +971,10 @@
 
 ---
 
-### T-036: Buat Halaman Vue — SubmissionWindow Index + Create + Edit
+### T-038: Buat Halaman Vue — SubmissionWindow Index + Create + Edit
 
 **Fase:** 4 — Manajemen Jendela Pengajuan
-**Dependensi:** T-035
+**Dependensi:** T-037
 **Rujukan:** US-SW-01, US-SW-02, US-SW-03
 
 **Yang harus dikerjakan:**
@@ -941,10 +999,10 @@
 
 ---
 
-### T-037: Buat VerificationController — Index (Daftar Proposal Diajukan)
+### T-039: Buat VerificationController — Index (Daftar Proposal Diajukan)
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-019, T-022
+**Dependensi:** T-019, T-024
 **Rujukan:** US-VER-01
 
 **Yang harus dikerjakan:**
@@ -963,10 +1021,10 @@
 
 ---
 
-### T-038: Buat Halaman Vue — Verification Index
+### T-040: Buat Halaman Vue — Verification Index
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-037
+**Dependensi:** T-039
 **Rujukan:** US-VER-01
 
 **Yang harus dikerjakan:**
@@ -984,10 +1042,10 @@
 
 ---
 
-### T-039: Buat VerificationController — Show + Auto-Transition Diajukan→VerifikasiOnline
+### T-041: Buat VerificationController — Show + Auto-Transition Diajukan→VerifikasiOnline
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-037
+**Dependensi:** T-039
 **Rujukan:** US-VER-02 (Auto-transition saat buka detail)
 
 **Yang harus dikerjakan:**
@@ -1007,10 +1065,10 @@
 
 ---
 
-### T-040: Buat Halaman Vue — Verification Show + Verifikasi Per-Dokumen
+### T-042: Buat Halaman Vue — Verification Show + Verifikasi Per-Dokumen
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-039
+**Dependensi:** T-041
 **Rujukan:** US-VER-03, US-VER-04, US-VER-05, US-VER-06
 
 **Yang harus dikerjakan:**
@@ -1032,10 +1090,10 @@
 
 ---
 
-### T-041: Implementasi Backend Verifikasi Per-Dokumen + Keputusan Akhir
+### T-043: Implementasi Backend Verifikasi Per-Dokumen + Keputusan Akhir
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-039
+**Dependensi:** T-041
 **Rujukan:** US-VER-03, US-VER-04, US-VER-05, US-VER-06
 
 **Yang harus dikerjakan:**
@@ -1062,10 +1120,10 @@
 
 ---
 
-### T-042: Implementasi Revisi Dokumen oleh Pengaju (Upload Ulang Versi Lama)
+### T-044: Implementasi Revisi Dokumen oleh Pengaju (Upload Ulang Versi Lama)
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-041, T-032
+**Dependensi:** T-043, T-034
 **Rujukan:** US-VER-07, US-VER-08, DEC-08 (Versi lama tidak dihapus)
 
 **Yang harus dikerjakan:**
@@ -1088,10 +1146,10 @@
 
 ---
 
-### T-043: Buat PhysicalArchiveController + Halaman Arsip Berkas Fisik
+### T-045: Buat PhysicalArchiveController + Halaman Arsip Berkas Fisik
 
 **Fase:** 5 — Verifikasi Proposal
-**Dependensi:** T-041
+**Dependensi:** T-043
 **Rujukan:** US-VER-09, US-VER-10, US-VER-11
 
 **Yang harus dikerjakan:**
@@ -1117,7 +1175,7 @@
 
 ---
 
-### T-044: Buat PengajuListController + Halaman Daftar & Profil Pengaju
+### T-046: Buat PengajuListController + Halaman Daftar & Profil Pengaju
 
 **Fase:** 5 — Verifikasi Proposal
 **Dependensi:** T-019
@@ -1148,10 +1206,10 @@
 
 ---
 
-### T-045: Buat LpjController (Pengaju) + Upload LPJ
+### T-047: Buat LpjController (Pengaju) + Upload LPJ
 
 **Fase:** 6 — Modul LPJ
-**Dependensi:** T-043 (butuh status `verifikasi_final`)
+**Dependensi:** T-045 (butuh status `verifikasi_final`)
 **Rujukan:** US-LPJ-01, US-LPJ-02, US-LPJ-03, DEC-09 (LPJ wajib ada)
 
 **Yang harus dikerjakan:**
@@ -1176,10 +1234,10 @@
 
 ---
 
-### T-046: Buat Halaman Vue — LPJ Upload (Pengaju)
+### T-048: Buat Halaman Vue — LPJ Upload (Pengaju)
 
 **Fase:** 6 — Modul LPJ
-**Dependensi:** T-045
+**Dependensi:** T-047
 **Rujukan:** US-LPJ-01, US-LPJ-02, US-LPJ-03
 
 **Yang harus dikerjakan:**
@@ -1199,10 +1257,10 @@
 
 ---
 
-### T-047: Buat LpjVerificationController (Admin Kesra) + Halaman
+### T-049: Buat LpjVerificationController (Admin Kesra) + Halaman
 
 **Fase:** 6 — Modul LPJ
-**Dependensi:** T-045
+**Dependensi:** T-047
 **Rujukan:** US-LPJ-04, US-LPJ-05, US-LPJ-06
 
 **Yang harus dikerjakan:**
@@ -1234,10 +1292,10 @@
 
 ---
 
-### T-048: Buat Dashboard Pengaju (Stepper + Alert)
+### T-050: Buat Dashboard Pengaju (Stepper + Alert)
 
 **Fase:** 7 — Dashboard & Notifikasi
-**Dependensi:** T-034, T-046
+**Dependensi:** T-036, T-048
 **Rujukan:** US-DASH-01, US-NOTIF-03, US-PROP-07
 
 **Yang harus dikerjakan:**
@@ -1262,10 +1320,10 @@
 
 ---
 
-### T-049: Buat Dashboard Admin Kesra (Statistik + Tabel)
+### T-051: Buat Dashboard Admin Kesra (Statistik + Tabel)
 
 **Fase:** 7 — Dashboard & Notifikasi
-**Dependensi:** T-041, T-047
+**Dependensi:** T-043, T-049
 **Rujukan:** US-DASH-02
 
 **Yang harus dikerjakan:**
@@ -1287,7 +1345,7 @@
 
 ---
 
-### T-050: Buat Dashboard Super Admin
+### T-052: Buat Dashboard Super Admin
 
 **Fase:** 7 — Dashboard & Notifikasi
 **Dependensi:** T-019
@@ -1308,7 +1366,7 @@
 
 ---
 
-### T-051: Buat Notification Classes (In-App)
+### T-053: Buat Notification Classes (In-App)
 
 **Fase:** 7 — Dashboard & Notifikasi
 **Dependensi:** T-014
@@ -1336,10 +1394,10 @@
 
 ---
 
-### T-052: Buat NotificationController + Dropdown UI
+### T-054: Buat NotificationController + Dropdown UI
 
 **Fase:** 7 — Dashboard & Notifikasi
-**Dependensi:** T-051
+**Dependensi:** T-053
 **Rujukan:** US-NOTIF-01, US-NOTIF-02
 
 **Yang harus dikerjakan:**
@@ -1369,7 +1427,7 @@
 
 ---
 
-### T-053: Buat AdminKesraManagementController + CRUD
+### T-055: Buat AdminKesraManagementController + CRUD
 
 **Fase:** 8 — Manajemen Akun Staf
 **Dependensi:** T-019
@@ -1401,10 +1459,10 @@
 
 ---
 
-### T-054: Buat Halaman Vue — Manajemen Admin Kesra
+### T-056: Buat Halaman Vue — Manajemen Admin Kesra
 
 **Fase:** 8 — Manajemen Akun Staf
-**Dependensi:** T-053
+**Dependensi:** T-055
 **Rujukan:** US-STAFF-01, US-STAFF-02, US-STAFF-03, US-STAFF-04
 
 **Yang harus dikerjakan:**
@@ -1425,7 +1483,7 @@
 
 ---
 
-### T-055: Profil Edit untuk Admin Kesra dan Super Admin
+### T-057: Profil Edit untuk Admin Kesra dan Super Admin
 
 **Fase:** 8 — Manajemen Akun Staf
 **Dependensi:** T-019
@@ -1454,7 +1512,7 @@
 
 ---
 
-### T-056: Buat API Login Endpoint (Sanctum)
+### T-058: Buat API Login Endpoint (Sanctum)
 
 **Fase:** 9 — API Mobile
 **Dependensi:** T-001
@@ -1478,7 +1536,7 @@
 
 ---
 
-### T-057: Buat API Proposals Endpoint (Publik)
+### T-059: Buat API Proposals Endpoint (Publik)
 
 **Fase:** 9 — API Mobile
 **Dependensi:** T-009
@@ -1501,10 +1559,10 @@
 
 ---
 
-### T-058: Buat API User Endpoint (Auth Required)
+### T-060: Buat API User Endpoint (Auth Required)
 
 **Fase:** 9 — API Mobile
-**Dependensi:** T-056
+**Dependensi:** T-058
 **Rujukan:** US-API-03
 
 **Yang harus dikerjakan:**
@@ -1528,10 +1586,10 @@
 
 ---
 
-### T-059: Feature Test — State Transition Proposal
+### T-061: Feature Test — State Transition Proposal
 
 **Fase:** 10 — Testing
-**Dependensi:** T-034 (submit), T-041 (verifikasi), T-043 (arsip fisik)
+**Dependensi:** T-036 (submit), T-043 (verifikasi), T-045 (arsip fisik)
 **Rujukan:** ARCHITECTURE.md bagian 9.3
 
 **Yang harus dikerjakan:**
@@ -1550,7 +1608,7 @@
 
 ---
 
-### T-060: Feature Test — Autentikasi & Role Access
+### T-062: Feature Test — Autentikasi & Role Access
 
 **Fase:** 10 — Testing
 **Dependensi:** T-019
@@ -1575,10 +1633,10 @@
 
 ---
 
-### T-061: Feature Test — Upload Dokumen + Versioning
+### T-063: Feature Test — Upload Dokumen + Versioning
 
 **Fase:** 10 — Testing
-**Dependensi:** T-032, T-042
+**Dependensi:** T-034, T-044
 **Rujukan:** DEC-08 (Versi lama tidak dihapus), ARCHITECTURE.md bagian 9.3
 
 **Yang harus dikerjakan:**
@@ -1596,10 +1654,10 @@
 
 ---
 
-### T-062: Feature Test — Verifikasi Dokumen + LPJ Workflow
+### T-064: Feature Test — Verifikasi Dokumen + LPJ Workflow
 
 **Fase:** 10 — Testing
-**Dependensi:** T-041, T-047
+**Dependensi:** T-043, T-049
 **Rujukan:** ARCHITECTURE.md bagian 9.3
 
 **Yang harus dikerjakan:**
@@ -1618,10 +1676,10 @@
 
 ---
 
-### T-063: Feature Test — API Mobile
+### T-065: Feature Test — API Mobile
 
 **Fase:** 10 — Testing
-**Dependensi:** T-056, T-057, T-058
+**Dependensi:** T-058, T-059, T-060
 **Rujukan:** ARCHITECTURE.md bagian 9.3
 
 **Yang harus dikerjakan:**
@@ -1640,10 +1698,10 @@
 
 ---
 
-### T-064: Buat DemoSeeder (Data Dummy untuk Presentasi)
+### T-066: Buat DemoSeeder (Data Dummy untuk Presentasi)
 
 **Fase:** 10 — Testing & Polish
-**Dependensi:** T-034
+**Dependensi:** T-036
 **Rujukan:** PRD bagian 8.1 (Open Question #5)
 
 **Yang harus dikerjakan:**
@@ -1664,7 +1722,7 @@
 
 ---
 
-### T-065: Polish UI — Sidebar, Styling, Responsive
+### T-067: Polish UI — Sidebar, Styling, Responsive
 
 **Fase:** 10 — Testing & Polish
 **Dependensi:** Semua task Vue sebelumnya
@@ -1688,7 +1746,7 @@
 
 ---
 
-### T-066: Jalankan Laravel Pint + Final Review
+### T-068: Jalankan Laravel Pint + Final Review
 
 **Fase:** 10 — Testing & Polish
 **Dependensi:** Semua task PHP sebelumnya
@@ -1720,7 +1778,7 @@
 | Fase | Jumlah Task | Status |
 |---|:---:|---|
 | Fase 0 — Setup & Fondasi | 14 | ⬜ |
-| Fase 1 — Autentikasi & Role | 6 | ⬜ |
+| Fase 1 — Autentikasi & Role | 8 | ⬜ |
 | Fase 2 — State Machine | 4 | ⬜ |
 | Fase 3 — Manajemen Proposal | 10 | ⬜ |
 | Fase 4 — Jendela Pengajuan | 2 | ⬜ |
@@ -1730,7 +1788,7 @@
 | Fase 8 — Manajemen Staf | 3 | ⬜ |
 | Fase 9 — API Mobile | 3 | ⬜ |
 | Fase 10 — Testing & Polish | 8 | ⬜ |
-| **Total** | **66** | |
+| **Total** | **68** | |
 
 ---
 
