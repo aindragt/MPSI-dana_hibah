@@ -3,23 +3,13 @@
 
 | Informasi Dokumen | Detail |
 |---|---|
-| **Versi Dokumen** | 3.0 (Rebuild) |
-| **Tanggal** | 7 September 2026 |
+| **Versi Dokumen** | 1.0 |
+| **Tanggal** | 8 September 2026 |
 | **Status** | Draft — Menunggu Review Tim |
 | **Mata Kuliah** | Manajemen Proyek Sistem Informasi (MPSI) |
 | **Metodologi** | Agile (Sprint-based, presentasi progress mingguan) |
 | **Tim Pengembang** | Kelompok Mahasiswa (5 orang) |
 | **Tech Stack** | Laravel + Inertia.js + Vue.js (VILT Stack), MySQL, Laravel Sanctum |
-
----
-
-## Riwayat Perubahan Dokumen
-
-| Versi | Tanggal | Perubahan Utama |
-|:---:|---|---|
-| 1.0 | 21 Juni 2026 | Dokumen awal — arsitektur 4 role (Pengaju, Admin Kesra, Tim Kesra, Tim TAPD), 8 status proposal. Tech stack: Laravel 11 + Blade + Tailwind CSS. |
-| 2.0 | 13 Juli 2026 | Penghapusan ekosistem TAPD. Penyederhanaan menjadi 3 role dan 7 status. Penambahan field registrasi institusional. |
-| **3.0** | **7 September 2026** | **Rebuild total.** Migrasi tech stack ke VILT (Laravel + Inertia.js + Vue.js). Penggabungan role Tim Kesra ke Admin Kesra. Penambahan role Super Admin. Penambahan modul LPJ. Perbaikan keamanan penyimpanan file (semua dokumen sensitif ke disk privat). Penambahan API mobile via Sanctum. |
 
 ---
 
@@ -55,7 +45,7 @@ Membangun ulang sebuah **sistem informasi berbasis web** menggunakan arsitektur 
 |---|---|---|
 | 1 | Digitalisasi alur pengajuan end-to-end | 100% pengajuan dan LPJ diproses melalui sistem |
 | 2 | Transparansi status | Pengaju dapat melacak status proposal secara *real-time* melalui dashboard |
-| 3 | Efisiensi verifikasi | Waktu verifikasi berkurang ≥ 40% dibanding proses manual |
+| 3 | Keterlacakan proses | 100% perubahan status proposal tercatat dalam audit trail (`proposal_status_logs`) dan dapat ditelusuri — mencakup informasi siapa yang mengubah, kapan, dari status apa ke status apa, beserta catatan |
 | 4 | Kepatuhan jadwal | Sistem secara otomatis membuka/menutup jendela pengajuan sesuai kalender |
 | 5 | Akuntabilitas | Setiap perubahan status tercatat sebagai *audit trail* |
 | 6 | Keamanan data | Seluruh dokumen sensitif tersimpan di disk privat dengan autentikasi |
@@ -63,7 +53,7 @@ Membangun ulang sebuah **sistem informasi berbasis web** menggunakan arsitektur 
 
 ### 1.4 Ruang Lingkup
 
-- **Dalam lingkup**: Registrasi pengaju, pengajuan proposal, verifikasi online & offline, manajemen LPJ, dashboard & statistik, notifikasi, manajemen akun staf, audit trail, API mobile.
+- **Dalam lingkup**: Registrasi pengaju, pengajuan proposal, verifikasi online & offline, manajemen LPJ, dashboard & statistik, notifikasi, manajemen akun staf, manajemen jendela pengajuan, audit trail, API mobile.
 - **Di luar lingkup**: Lihat **Bagian 7 — Out of Scope**.
 
 ---
@@ -77,7 +67,7 @@ Sistem rebuild ini hanya memiliki **3 (tiga) role aktif**. Role "Tim Kesra" dan 
 | # | Role | Slug di DB | Deskripsi | Cara Registrasi | Jumlah Estimasi |
 |---|---|---|---|---|---|
 | 1 | **Pengaju** | `pengaju` | Lembaga, yayasan, atau organisasi masyarakat yang mengajukan proposal dana hibah. | Registrasi mandiri via halaman publik + verifikasi email. | Puluhan–ratusan per periode |
-| 2 | **Admin Kesra** | `admin-kesra` | Menangani **seluruh** proses verifikasi (online maupun fisik/offline), mengelola LPJ, melihat dashboard & statistik. Menggabungkan fungsi "Admin Kesra" dan "Tim Kesra" dari sistem lama. | Akun dibuat **manual** oleh Super Admin via panel admin (bukan self-register). | 1–5 orang |
+| 2 | **Admin Kesra** | `admin-kesra` | Menangani **seluruh** proses verifikasi (online maupun fisik/offline), mengelola LPJ, mengelola jendela pengajuan, melihat dashboard & statistik. Menggabungkan fungsi "Admin Kesra" dan "Tim Kesra" dari sistem lama. | Akun dibuat **manual** oleh Super Admin via panel admin (bukan self-register). | 1–5 orang |
 | 3 | **Super Admin** | `super_admin` | Mengelola akun Admin Kesra (CRUD). Memiliki akses tertinggi untuk manajemen pengguna staf. | Akun dibuat via **seeder** saja, tidak lewat UI. | 1 orang |
 
 > [!IMPORTANT]
@@ -113,6 +103,8 @@ Sistem rebuild ini hanya memiliki **3 (tiga) role aktif**. Role "Tim Kesra" dan 
 | Lihat profil & riwayat pengajuan pengaju | ❌ | ✅ | ❌ |
 | Lihat daftar seluruh pengaju terdaftar | ❌ | ✅ | ❌ |
 | Lihat dashboard & statistik | ❌ | ✅ | ❌ |
+| **Manajemen Jendela Pengajuan** | | | |
+| CRUD jendela pengajuan (submission windows) | ❌ | ✅ | ❌ |
 | **Manajemen Akun Staf** | | | |
 | CRUD akun Admin Kesra | ❌ | ❌ | ✅ |
 
@@ -163,7 +155,7 @@ Setiap user story diberi kode unik dan prioritas (Tinggi / Sedang / Rendah).
 | US-PROP-06 | Sebagai **Pengaju**, saya **tidak dapat** mengedit proposal yang sudah diajukan, kecuali statusnya dikembalikan ke Perlu Revisi oleh Admin Kesra, agar integritas data pengajuan terjaga. | **Tinggi** |
 | US-PROP-07 | Sebagai **Pengaju**, saya ingin melihat status proposal aktif saya melalui **visual stepper** di dashboard, agar saya dapat memantau progres pengajuan secara intuitif. | **Sedang** |
 | US-PROP-08 | Sebagai **Pengaju**, saya ingin melihat riwayat pengajuan tahun-tahun sebelumnya dalam mode *read-only*, agar saya punya referensi historis. | **Rendah** |
-| US-PROP-09 | Sebagai **sistem**, saya ingin membatasi pembuatan proposal baru **hanya pada periode 1 Januari – 31 Mei** tahun anggaran berjalan, agar kepatuhan jadwal terjaga. Di luar periode tersebut, fitur pembuatan proposal dinonaktifkan. | **Tinggi** |
+| US-PROP-09 | Sebagai **sistem**, saya ingin membatasi pembuatan proposal baru **hanya pada periode jendela pengajuan yang aktif** untuk tahun anggaran berjalan, agar kepatuhan jadwal terjaga. Di luar periode tersebut, fitur pembuatan proposal dinonaktifkan. | **Tinggi** |
 | US-PROP-10 | Sebagai **sistem**, saya ingin membatasi setiap Pengaju agar hanya memiliki **maksimal 1 proposal aktif per tahun anggaran**, agar tidak terjadi pengajuan ganda. | **Tinggi** |
 | US-PROP-11 | Sebagai **sistem**, saya ingin menghasilkan nomor proposal dengan format `HIBAH-{TAHUN_ANGGARAN}-{UNIX_TIMESTAMP}` secara otomatis saat proposal dibuat, agar penomoran unik dan konsisten. | **Tinggi** |
 
@@ -225,7 +217,17 @@ Setiap user story diberi kode unik dan prioritas (Tinggi / Sedang / Rendah).
 
 ---
 
-### 3.8 Epic: API Mobile
+### 3.8 Epic: Manajemen Jendela Pengajuan
+
+| ID | User Story | Prioritas |
+|---|---|:---:|
+| US-SW-01 | Sebagai **Admin Kesra**, saya ingin membuat entri jendela pengajuan baru untuk tahun anggaran tertentu dengan menentukan tanggal buka dan tanggal tutup, agar sistem mengetahui kapan periode pengajuan dimulai dan berakhir untuk tahun tersebut. | **Tinggi** |
+| US-SW-02 | Sebagai **Admin Kesra**, saya ingin mengubah tanggal buka dan/atau tanggal tutup jendela pengajuan yang sudah ada, agar jadwal pengajuan dapat disesuaikan jika ada perubahan kebijakan. | **Sedang** |
+| US-SW-03 | Sebagai **Admin Kesra**, saya ingin mengaktifkan atau menonaktifkan jendela pengajuan tertentu, agar saya dapat mengontrol periode mana yang sedang berlaku tanpa menghapus data jendela. | **Sedang** |
+
+---
+
+### 3.9 Epic: API Mobile
 
 | ID | User Story | Prioritas |
 |---|---|:---:|
@@ -247,6 +249,7 @@ Setiap user story diberi kode unik dan prioritas (Tinggi / Sedang / Rendah).
 | NFR-SEC-04 | Sistem menerapkan **rate limiting** pada endpoint login dan registrasi untuk mencegah brute force. | **Sedang** |
 | NFR-SEC-05 | Autentikasi API mobile menggunakan **Laravel Sanctum** (token-based). Token diberi nama identifikasi (e.g., `MobileAppToken`). | **Tinggi** |
 | NFR-SEC-06 | Setiap perubahan status proposal wajib dicatat sebagai **audit trail** di tabel `proposal_status_logs` (siapa, kapan, dari status apa ke status apa, catatan). | **Tinggi** |
+| NFR-SEC-07 | **Retensi file versi lama**: Seluruh versi dokumen proposal yang pernah diunggah wajib **disimpan secara permanen** di disk privat. File versi lama tidak boleh dihapus saat Pengaju mengunggah revisi, agar Admin Kesra dapat mengakses riwayat dokumen untuk keperluan audit dan perbandingan. | **Tinggi** |
 
 > [!CAUTION]
 > **Perbaikan Kritis dari Sistem Lama:**
@@ -514,7 +517,7 @@ Master data 11 jenis dokumen wajib. Di-seed saat inisialisasi.
 
 #### Tabel `proposal_documents`
 
-File dokumen yang diunggah Pengaju, mendukung **versioning** saat revisi.
+File dokumen yang diunggah Pengaju, mendukung **versioning** saat revisi. **Semua versi disimpan permanen** — file versi lama tidak dihapus saat ada revisi, agar Admin Kesra dapat mengakses riwayat dokumen untuk keperluan audit dan perbandingan.
 
 | Kolom | Tipe | Keterangan |
 |---|---|---|
@@ -525,9 +528,12 @@ File dokumen yang diunggah Pengaju, mendukung **versioning** saat revisi.
 | `original_filename` | VARCHAR(255) | Nama file asli saat upload |
 | `mime_type` | VARCHAR(50) | `application/pdf`, `image/jpeg`, `image/png` |
 | `file_size` | UNSIGNED INT | Ukuran dalam bytes |
-| `version` | UNSIGNED SMALLINT, DEFAULT 1 | Increment saat revisi |
+| `version` | UNSIGNED SMALLINT, DEFAULT 1 | Increment saat revisi; versi terbesar = dokumen aktif |
 
 **Unique Constraint:** `(proposal_id, document_type_id, version)`
+
+> [!NOTE]
+> Saat Pengaju mengunggah ulang dokumen yang direvisi, sistem membuat **record baru** di tabel `proposal_documents` dengan `version + 1`. Record dan file versi sebelumnya **tetap tersimpan**. Untuk menampilkan dokumen terkini, query mengambil record dengan `version` tertinggi per `(proposal_id, document_type_id)`.
 
 ---
 
@@ -603,7 +609,7 @@ Skema bawaan Laravel Sanctum untuk autentikasi API mobile.
 | `users` → `proposals` (via `verified_by`) | One-to-Many | Admin Kesra memverifikasi banyak proposal |
 | `users` → `users` (via `created_by`) | One-to-Many (self) | Super Admin membuat akun Admin Kesra |
 | `proposals` → `submission_windows` | Many-to-One | Proposal terikat jendela tahun |
-| `proposals` → `proposal_documents` | One-to-Many | Proposal memiliki banyak dokumen |
+| `proposals` → `proposal_documents` | One-to-Many | Proposal memiliki banyak dokumen (termasuk semua versi) |
 | `proposals` → `proposal_status_logs` | One-to-Many | Proposal memiliki banyak log status |
 | `proposals` → `revision_notes` | One-to-Many | Proposal memiliki banyak catatan revisi |
 | `proposal_documents` → `document_types` | Many-to-One | Setiap dokumen bertipe 1 dari 11 jenis |
@@ -614,13 +620,14 @@ Skema bawaan Laravel Sanctum untuk autentikasi API mobile.
 
 > [!IMPORTANT]
 > **SEMUA file sensitif wajib disimpan di disk privat.** Ini adalah perbaikan keamanan kritis dari sistem lama.
+> **SEMUA versi file dokumen proposal disimpan secara permanen.** File versi lama tidak dihapus saat ada revisi.
 
-| Jenis File | Disk | Lokasi Storage | Akses |
-|---|---|---|---|
-| Dokumen proposal (11 jenis) | `local` (private) | `storage/app/private/proposals/{tahun}/{user_id}/` | Hanya via controller + auth + policy check |
-| Berkas legalitas pengaju (akta, SK, rekening, NPWP) | `local` (private) | `storage/app/private/profiles/{user_id}/` | Hanya via controller + auth + policy check |
-| Foto profil pengaju | `local` (private) | `storage/app/private/profiles/{user_id}/` | Hanya via controller + auth check |
-| File LPJ | `local` (private) | `storage/app/private/lpj/{proposal_id}/` | Hanya via controller + auth + policy check |
+| Jenis File | Disk | Lokasi Storage | Akses | Retensi |
+|---|---|---|---|---|
+| Dokumen proposal (11 jenis) | `local` (private) | `storage/app/private/proposals/{tahun}/{user_id}/` | Hanya via controller + auth + policy check | **Permanen** — semua versi disimpan |
+| Berkas legalitas pengaju (akta, SK, rekening, NPWP) | `local` (private) | `storage/app/private/profiles/{user_id}/` | Hanya via controller + auth + policy check | Permanen |
+| Foto profil pengaju | `local` (private) | `storage/app/private/profiles/{user_id}/` | Hanya via controller + auth check | Permanen |
+| File LPJ | `local` (private) | `storage/app/private/lpj/{proposal_id}/` | Hanya via controller + auth + policy check | Permanen |
 
 ---
 
@@ -630,7 +637,7 @@ Skema bawaan Laravel Sanctum untuk autentikasi API mobile.
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Draft : Pengaju membuat proposal\n(dalam jendela 1 Jan - 31 Mei)
+    [*] --> Draft : Pengaju membuat proposal\n(dalam jendela pengajuan aktif)
 
     Draft --> Diajukan : Pengaju mengajukan\n(semua 11 dokumen lengkap)
 
@@ -758,8 +765,8 @@ Hal-hal berikut **secara eksplisit tidak termasuk** dalam lingkup project rebuil
 | 3 | Environment development menggunakan **Laragon** (Windows) atau setara. Database **MySQL 8**. |
 | 4 | Akun Super Admin dibuat **hanya via database seeder** dan tidak memerlukan halaman registrasi khusus. |
 | 5 | Satu Pengaju = satu akun user. Tidak ada mekanisme multi-user per organisasi. |
-| 6 | Jendela pengajuan (1 Januari – 31 Mei) bersifat **konfigurabel** melalui tabel `submission_windows`, bukan hardcoded. |
-| 7 | Setiap dokumen yang direvisi akan mendapatkan nomor versi baru (`version + 1`). File versi lama **dihapus** dari storage untuk menghemat ruang. |
+| 6 | Jendela pengajuan bersifat **konfigurabel** melalui tabel `submission_windows` dan dikelola oleh Admin Kesra melalui panel admin. Tanggal buka dan tutup tidak di-hardcode. |
+| 7 | Setiap dokumen yang direvisi akan mendapatkan nomor versi baru (`version + 1`). **Semua versi file disimpan secara permanen** di storage — file versi lama tidak dihapus, agar Admin Kesra dapat mengakses riwayat dokumen untuk keperluan audit dan perbandingan antar versi. |
 | 8 | Proses persetujuan oleh TAPD dilakukan **sepenuhnya offline** dan di luar kendali sistem. Status **Verifikasi Final** adalah status terminal tertinggi dalam sistem. |
 | 9 | Notifikasi proposal baru dikirim ke **semua** user dengan role `admin-kesra`. |
 | 10 | API mobile bersifat **read-only** (hanya login, data proposal publik, dan data user). Tidak ada fitur write (pembuatan proposal) via API. |
@@ -817,7 +824,7 @@ Hal-hal berikut **secara eksplisit tidak termasuk** dalam lingkup project rebuil
   "data": [
     {
       "id": 1,
-      "proposal_number": "HIBAH-2026-1719100000",
+      "proposal_number": "HIBAH-2026-1773756000",
       "activity_title": "Pembangunan Posyandu Desa",
       "total_budget": "50000000.00",
       "status": "verifikasi_final",
@@ -827,6 +834,9 @@ Hal-hal berikut **secara eksplisit tidak termasuk** dalam lingkup project rebuil
 }
 ```
 
+> [!NOTE]
+> Unix timestamp `1773756000` pada contoh di atas sesuai dengan tanggal 15 Maret 2026 10:00:00 UTC, konsisten dengan `created_at` dan tahun anggaran 2026.
+
 ---
 
 ## Lampiran C: Glosarium
@@ -834,10 +844,10 @@ Hal-hal berikut **secara eksplisit tidak termasuk** dalam lingkup project rebuil
 | Istilah | Definisi |
 |---|---|
 | **Pengaju** | Lembaga, yayasan, atau organisasi yang mendaftar dan mengajukan proposal dana hibah |
-| **Admin Kesra** | Petugas Bagian Kesejahteraan Rakyat yang menangani seluruh proses verifikasi (online & offline) dan pengelolaan LPJ |
+| **Admin Kesra** | Petugas Bagian Kesejahteraan Rakyat yang menangani seluruh proses verifikasi (online & offline), pengelolaan LPJ, dan manajemen jendela pengajuan |
 | **Super Admin** | Administrator tertinggi yang mengelola akun Admin Kesra |
 | **TAPD** | Tim Anggaran Pemerintah Daerah — proses di luar sistem (offline) |
-| **Jendela Pengajuan** | Periode waktu di mana sistem menerima pengajuan baru (1 Januari – 31 Mei) |
+| **Jendela Pengajuan** | Periode waktu yang dikonfigurasi Admin Kesra di mana sistem menerima pengajuan baru |
 | **Verifikasi Online** | Pemeriksaan berkas digital yang diunggah melalui sistem |
 | **Verifikasi Fisik/Offline** | Pemeriksaan berkas asli yang diserahkan langsung ke kantor Pemkab |
 | **Verifikasi Final** | Status terminal dalam sistem; menandakan seluruh proses verifikasi selesai |
@@ -849,7 +859,8 @@ Hal-hal berikut **secara eksplisit tidak termasuk** dalam lingkup project rebuil
 | **Sanctum** | Library autentikasi token Laravel untuk SPA/Mobile API |
 | **Audit Trail** | Catatan kronologis setiap perubahan status yang mencatat siapa, kapan, dan apa yang berubah |
 | **Backed Enum** | Fitur PHP 8.1+ yang digunakan untuk mendefinisikan status proposal dengan type-safety |
+| **Versioning Dokumen** | Mekanisme penyimpanan semua versi file dokumen secara permanen untuk keperluan audit |
 
 ---
 
-*— Akhir Dokumen PRD v3.0 (Rebuild) —*
+*— Akhir Dokumen PRD v1.0 —*
