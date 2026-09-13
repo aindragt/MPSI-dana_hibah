@@ -92,7 +92,7 @@
 - [ ] Database `ehibah_kesra` sudah dibuat
 - [ ] `php artisan key:generate` berhasil
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
