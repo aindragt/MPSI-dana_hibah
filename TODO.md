@@ -15,7 +15,7 @@
 
 ---
 
-### T-001: Inisialisasi Project Laravel + Breeze (Inertia + Vue)Inisialisasi Project Laravel + Breeze (Inertia + Vue)
+### T-001: Inisialisasi Project Laravel + Breeze (Inertia + Vue)
 
 **Fase:** 0 — Setup Project & Fondasi
 **Dependensi:** Tidak ada
@@ -114,7 +114,7 @@
 - [ ] `php artisan migrate` berhasil tanpa error
 - [ ] Tabel `roles` ada di database dengan kolom yang benar
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
