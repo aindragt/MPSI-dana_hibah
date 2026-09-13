@@ -138,7 +138,7 @@
 - [ ] `php artisan db:seed --class=RoleSeeder` berhasil
 - [ ] Tabel `roles` berisi TEPAT 3 baris dengan slug `pengaju`, `admin-kesra`, `super_admin`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
