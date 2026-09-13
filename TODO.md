@@ -40,7 +40,7 @@
 - [ ] `npm run dev` berjalan tanpa error
 - [ ] Halaman login Breeze muncul di browser (`http://localhost:8000/login`)
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
