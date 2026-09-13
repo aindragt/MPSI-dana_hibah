@@ -254,7 +254,7 @@
 - [ ] `php artisan db:seed --class=DocumentTypeSeeder` berhasil
 - [ ] Tabel `document_types` berisi TEPAT 11 baris
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
