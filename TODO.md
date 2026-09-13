@@ -277,7 +277,7 @@
 - [ ] `php artisan migrate` berhasil
 - [ ] UNIQUE constraint `(proposal_id, document_type_id, version)` terbuat
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
