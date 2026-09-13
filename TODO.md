@@ -334,7 +334,7 @@
 - [ ] Semua model bisa di-instantiate tanpa error (`php artisan tinker` → `new App\Models\Role`)
 - [ ] Relasi terdefinisi (misal `User::first()->role` tidak error)
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
