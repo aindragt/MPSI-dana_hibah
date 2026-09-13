@@ -302,7 +302,7 @@
 - [ ] `php artisan migrate` berhasil (seluruh migration dari T-004 s/d T-012)
 - [ ] Ketiga tabel ada di database dengan FK yang benar
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
