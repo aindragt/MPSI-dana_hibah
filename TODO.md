@@ -161,7 +161,7 @@
 - [ ] `php artisan migrate` berhasil tanpa error
 - [ ] Tabel `users` memiliki semua kolom baru
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
