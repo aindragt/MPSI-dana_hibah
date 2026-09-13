@@ -15,7 +15,7 @@
 
 ---
 
-### T-001: Inisialisasi Project Laravel + Breeze (Inertia + Vue)
+### T-001: Inisialisasi Project Laravel + Breeze (Inertia + Vue)Inisialisasi Project Laravel + Breeze (Inertia + Vue)
 
 **Fase:** 0 — Setup Project & Fondasi
 **Dependensi:** Tidak ada
@@ -62,7 +62,7 @@
 - [ ] `composer require spatie/laravel-model-states` berhasil tanpa error
 - [ ] Package terdaftar di `composer.json` → `require`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
