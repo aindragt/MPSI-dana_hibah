@@ -227,7 +227,7 @@
 - [ ] Kolom `status` bertipe VARCHAR, BUKAN ENUM
 - [ ] Foreign key ke `users` dan `submission_windows` terbuat
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
