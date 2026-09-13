@@ -357,7 +357,7 @@
 - [ ] `php artisan migrate` berhasil
 - [ ] Tabel `notifications` dan `sessions` ada di database
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
