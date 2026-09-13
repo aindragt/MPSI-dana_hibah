@@ -203,7 +203,7 @@
 - [ ] `php artisan migrate` berhasil tanpa error
 - [ ] Tabel `submission_windows` ada di database
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
