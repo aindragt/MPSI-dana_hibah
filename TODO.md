@@ -182,7 +182,7 @@
 - [ ] `php artisan migrate` berhasil tanpa error
 - [ ] Tabel `organization_profiles` ada dengan `user_id` UNIQUE
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
