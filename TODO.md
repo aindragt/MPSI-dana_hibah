@@ -579,7 +579,7 @@
 - [ ] Reset password dengan token invalid/expired → ditolak
 - [ ] `php artisan test --filter=PasswordResetTest` — semua lulus
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
