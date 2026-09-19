@@ -434,7 +434,7 @@
 - [ ] Login sebagai Admin Kesra → redirect ke `/admin-kesra/dashboard`
 - [ ] Akses `/` tanpa login → redirect ke `/login`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
