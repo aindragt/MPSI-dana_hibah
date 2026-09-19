@@ -410,7 +410,7 @@
 - [ ] Middleware `role:pengaju` memblokir akses user non-pengaju (return 403)
 - [ ] Middleware `role:admin-kesra` memblokir akses user non-admin-kesra
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
