@@ -493,7 +493,7 @@
 - [ ] Pengaju tidak bisa akses `/admin-kesra/*` (403)
 - [ ] Admin Kesra tidak bisa akses `/pengaju/*` (403)
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
