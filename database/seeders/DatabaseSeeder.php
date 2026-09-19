@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             DocumentTypeSeeder::class,
+            SuperAdminSeeder::class,
+            SubmissionWindowSeeder::class,
         ]);
     }
 }

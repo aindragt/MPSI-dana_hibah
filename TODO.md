@@ -459,7 +459,7 @@
 - [ ] User Super Admin bisa login
 - [ ] Tabel `submission_windows` berisi 1 entri tahun 2026
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
