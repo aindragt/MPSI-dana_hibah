@@ -549,7 +549,7 @@
 - [ ] Setelah klik link verifikasi (via email log atau Mailtrap) → `email_verified_at` terisi di database
 - [ ] User yang sudah verifikasi → bisa akses dashboard tanpa masalah
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
