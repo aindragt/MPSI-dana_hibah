@@ -9,6 +9,9 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 const form = useForm({
     name: '',
     email: '',
+    nama_ketua: '',
+    no_wa: '',
+    alamat: '',
     password: '',
     password_confirmation: '',
 });
@@ -26,7 +29,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Nama Lembaga / Organisasi" />
 
                 <TextInput
                     id="name"
@@ -57,6 +60,50 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
+                <InputLabel for="nama_ketua" value="Nama Ketua / Penanggung Jawab" />
+
+                <TextInput
+                    id="nama_ketua"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.nama_ketua"
+                    required
+                    autocomplete="off"
+                />
+
+                <InputError class="mt-2" :message="form.errors.nama_ketua" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="no_wa" value="No. WhatsApp" />
+
+                <TextInput
+                    id="no_wa"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.no_wa"
+                    required
+                    autocomplete="off"
+                />
+
+                <InputError class="mt-2" :message="form.errors.no_wa" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="alamat" value="Alamat Lengkap" />
+
+                <textarea
+                    id="alamat"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    v-model="form.alamat"
+                    required
+                    rows="3"
+                ></textarea>
+
+                <InputError class="mt-2" :message="form.errors.alamat" />
+            </div>
+
+            <div class="mt-4">
                 <InputLabel for="password" value="Password" />
 
                 <TextInput
@@ -74,7 +121,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Konfirmasi Password"
                 />
 
                 <TextInput
@@ -97,7 +144,7 @@ const submit = () => {
                     :href="route('login')"
                     class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    Already registered?
+                    Sudah terdaftar?
                 </Link>
 
                 <PrimaryButton
@@ -105,7 +152,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Daftar
                 </PrimaryButton>
             </div>
         </form>

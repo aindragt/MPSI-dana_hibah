@@ -387,7 +387,7 @@
 - [ ] Field `nama_ketua`, `no_wa`, `alamat` tersimpan di database
 - [ ] Email verifikasi terkirim (atau tercatat di log jika `MAIL_MAILER=log`)
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
