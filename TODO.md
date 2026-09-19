@@ -521,7 +521,7 @@
 - [ ] Pengaju bisa upload berkas legalitas (file tersimpan di `storage/app/private/profiles/{user_id}/`)
 - [ ] File TIDAK tersimpan di disk `public`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
