@@ -657,10 +657,10 @@
 - `app/Providers/AppServiceProvider.php` (modify)
 
 **Kriteria Selesai:**
-- [ ] Transisi status proposal otomatis membuat record di `proposal_status_logs`
-- [ ] Record log berisi `from_status`, `to_status`, `changed_by`, `proposal_id` yang benar
+- [x] Transisi status proposal otomatis membuat record di `proposal_status_logs`
+- [x] Record log berisi `from_status`, `to_status`, `changed_by`, `proposal_id` yang benar
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
