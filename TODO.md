@@ -680,10 +680,10 @@
 - `resources/js/Components/proposal/StatusBadge.vue` (baru)
 
 **Kriteria Selesai:**
-- [ ] `useProposalStatus('draft')` return `{ label: 'Draft', badgeColor: 'bg-gray-100 text-gray-700', ... }`
-- [ ] `StatusBadge` component render badge dengan warna yang benar
+- [x] `useProposalStatus('draft')` return `{ label: 'Draft', badgeColor: 'bg-gray-100 text-gray-700', ... }`
+- [x] `StatusBadge` component render badge dengan warna yang benar
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
