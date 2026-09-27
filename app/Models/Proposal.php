@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\States\ProposalStatus\ProposalStatusState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\ModelStates\HasStates;
 
 class Proposal extends Model
 {
     use HasFactory;
+    use HasStates;
 
     protected $fillable = [
         'proposal_number',
@@ -35,6 +38,7 @@ class Proposal extends Model
     protected function casts(): array
     {
         return [
+            'status' => ProposalStatusState::class,
             'total_budget' => 'decimal:2',
             'execution_start_date' => 'date',
             'execution_end_date' => 'date',

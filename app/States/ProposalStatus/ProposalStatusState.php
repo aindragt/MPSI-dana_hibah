@@ -8,8 +8,11 @@ use Spatie\ModelStates\StateConfig;
 abstract class ProposalStatusState extends State
 {
     abstract public function label(): string;      // Label untuk UI (e.g., "Perlu Revisi")
+
     abstract public function badgeColor(): string;  // Tailwind CSS class (e.g., "bg-yellow-100 text-yellow-800")
+
     abstract public function isEditable(): bool;    // Apakah Pengaju bisa edit di status ini
+
     abstract public function isTerminal(): bool;    // Apakah status ini final (tidak bisa transisi lagi)
 
     public static function config(): StateConfig

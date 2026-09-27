@@ -632,11 +632,11 @@
 - `app/Models/Proposal.php` (modify)
 
 **Kriteria Selesai:**
-- [ ] `Proposal::create([...])` otomatis set status ke `Draft`
-- [ ] `$proposal->status->canTransitionTo(Diajukan::class)` return `true`
-- [ ] `$proposal->status->canTransitionTo(VerifikasiFinal::class)` return `false` (transisi ilegal)
+- [x] `Proposal::create([...])` otomatis set status ke `Draft`
+- [x] `$proposal->status->canTransitionTo(Diajukan::class)` return `true`
+- [x] `$proposal->status->canTransitionTo(VerifikasiFinal::class)` return `false` (transisi ilegal)
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
