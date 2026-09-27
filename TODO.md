@@ -610,10 +610,10 @@
 - `app/States/ProposalStatus/Ditolak.php` (baru)
 
 **Kriteria Selesai:**
-- [ ] Semua 8 file terbuat tanpa syntax error
-- [ ] Config transisi di base class mendefinisikan TEPAT 10 transisi valid
+- [x] Semua 8 file terbuat tanpa syntax error
+- [x] Config transisi di base class mendefinisikan TEPAT 10 transisi valid
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
