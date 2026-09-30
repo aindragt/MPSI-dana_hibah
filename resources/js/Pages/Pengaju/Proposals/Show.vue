@@ -112,8 +112,10 @@ const isEditable = computed(() => {
 
             <!-- Document Checklist Component -->
             <DocumentChecklist
+                :proposal-id="proposal.id"
                 :document-types="documentTypes"
                 :uploaded-documents="proposal.documents"
+                :is-editable="isEditable"
             />
 
             <!-- Actions & Submit Section -->
@@ -128,14 +130,6 @@ const isEditable = computed(() => {
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <button
-                        v-if="isEditable"
-                        type="button"
-                        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50"
-                    >
-                        Upload Dokumen
-                    </button>
-
                     <button
                         v-if="isEditable && isAllDocumentsUploaded"
                         type="button"

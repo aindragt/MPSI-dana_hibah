@@ -908,11 +908,11 @@
 - `resources/js/Pages/Pengaju/Proposals/Show.vue` (modify)
 
 **Kriteria Selesai:**
-- [ ] Pengaju bisa upload dokumen per jenis dari halaman Show
-- [ ] Setelah upload berhasil, checklist diupdate (✅)
-- [ ] Dokumen yang sudah diupload bisa didownload via link
+- [x] Pengaju bisa upload dokumen per jenis dari halaman Show
+- [x] Setelah upload berhasil, checklist diupdate (✅)
+- [x] Dokumen yang sudah diupload bisa didownload via link
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
