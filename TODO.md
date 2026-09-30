@@ -730,11 +730,11 @@
 - `app/Services/ProposalService.php` (baru)
 
 **Kriteria Selesai:**
-- [ ] `generateProposalNumber(2026)` return string format `HIBAH-2026-{timestamp}`
-- [ ] `getActiveWindow()` return SubmissionWindow jika dalam periode aktif, null jika di luar
-- [ ] `hasActiveProposalThisYear()` return true jika sudah ada proposal aktif
+- [x] `generateProposalNumber(2026)` return string format `HIBAH-2026-{timestamp}`
+- [x] `getActiveWindow()` return SubmissionWindow jika dalam periode aktif, null jika di luar
+- [x] `hasActiveProposalThisYear()` return true jika sudah ada proposal aktif
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
