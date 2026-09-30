@@ -884,12 +884,12 @@
 - `routes/web.php` (modify)
 
 **Kriteria Selesai:**
-- [ ] Upload PDF/JPG/PNG berhasil tersimpan di `storage/app/private/proposals/...`
-- [ ] File > 5 MB ditolak
-- [ ] Upload ulang dokumen yang sama → record baru dengan `version + 1`, file lama TETAP ADA
-- [ ] File TIDAK tersimpan di `storage/app/public/`
+- [x] Upload PDF/JPG/PNG berhasil tersimpan di `storage/app/private/proposals/...`
+- [x] File > 5 MB ditolak
+- [x] Upload ulang dokumen yang sama → record baru dengan `version + 1`, file lama TETAP ADA
+- [x] File TIDAK tersimpan di `storage/app/public/`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Pengaju\DashboardController;
+use App\Http\Controllers\Pengaju\DocumentUploadController;
 use App\Http\Controllers\Pengaju\ProfileController;
 use App\Http\Controllers\Pengaju\ProposalController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
             Route::resource('proposals', ProposalController::class);
+            Route::post('proposals/{proposal}/documents', [DocumentUploadController::class, 'store'])->name('proposals.documents.store');
         });
 
     // Admin Kesra Routes
