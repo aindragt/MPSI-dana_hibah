@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { Head, Link } from '@inertiajs/vue3'
+import { Head, Link, router } from '@inertiajs/vue3'
 import PengajuLayout from '@/Layouts/PengajuLayout.vue'
 import StatusBadge from '@/Components/proposal/StatusBadge.vue'
 import DocumentChecklist from '@/Components/proposal/DocumentChecklist.vue'
@@ -40,6 +40,12 @@ const isAllDocumentsUploaded = computed(() => {
 const isEditable = computed(() => {
     return props.proposal.status === 'draft' || props.proposal.status === 'perlu_revisi'
 })
+
+const submitProposal = () => {
+    if (confirm('Apakah Anda yakin ingin mengajukan proposal ini? Setelah diajukan, proposal tidak dapat diubah kembali.')) {
+        router.post(route('pengaju.proposals.submit', props.proposal.id))
+    }
+}
 </script>
 
 <template>
@@ -133,6 +139,7 @@ const isEditable = computed(() => {
                     <button
                         v-if="isEditable && isAllDocumentsUploaded"
                         type="button"
+                        @click="submitProposal"
                         class="inline-flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-green-700 focus:outline-none"
                     >
                         Ajukan Proposal

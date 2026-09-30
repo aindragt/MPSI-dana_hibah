@@ -8,6 +8,7 @@ use App\Http\Requests\Pengaju\UpdateProposalRequest;
 use App\Models\DocumentType;
 use App\Models\Proposal;
 use App\Services\ProposalService;
+use App\States\ProposalStatus\Diajukan;
 use App\States\ProposalStatus\Draft;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -140,5 +141,28 @@ class ProposalController extends Controller
 
         return redirect()->route('pengaju.proposals.show', $proposal->id)
             ->with('success', 'Proposal berhasil diperbarui.');
+    }
+
+    /**
+     * Submit the specified proposal (Draft / PerluRevisi -> Diajukan).
+     */
+    public function submit(Proposal $proposal): RedirectResponse
+    {
+        $this->authorize('submit', $proposal);
+
+        if (! $proposal->status->canTransitionTo(Diajukan::class)) {
+            return redirect()->back()->withErrors([
+                'error' => 'Proposal tidak dapat diajukan dalam status saat ini.',
+            ]);
+        }
+
+        $proposal->status->transitionTo(Diajukan::class);
+
+        if ($proposal->submitted_at === null) {
+            $proposal->update(['submitted_at' => now()]);
+        }
+
+        return redirect()->route('pengaju.proposals.show', $proposal->id)
+            ->with('success', 'Proposal berhasil diajukan untuk verifikasi.');
     }
 }

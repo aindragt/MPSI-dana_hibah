@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
             Route::resource('proposals', ProposalController::class);
+            Route::post('proposals/{proposal}/submit', [ProposalController::class, 'submit'])->name('proposals.submit');
             Route::post('proposals/{proposal}/documents', [DocumentUploadController::class, 'store'])->name('proposals.documents.store');
         });
 

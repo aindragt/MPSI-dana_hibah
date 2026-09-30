@@ -933,12 +933,12 @@
 - `routes/web.php` (modify)
 
 **Kriteria Selesai:**
-- [ ] Submit hanya berhasil jika 11 dokumen lengkap
-- [ ] Submit tanpa 11 dokumen lengkap → error/redirect back dengan pesan
-- [ ] Status berubah ke `diajukan`, `submitted_at` terisi
-- [ ] Record baru muncul di `proposal_status_logs`
+- [x] Submit hanya berhasil jika 11 dokumen lengkap
+- [x] Submit tanpa 11 dokumen lengkap → error/redirect back dengan pesan
+- [x] Status berubah ke `diajukan`, `submitted_at` terisi
+- [x] Record baru muncul di `proposal_status_logs`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
