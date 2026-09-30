@@ -782,11 +782,11 @@
 - `resources/js/Pages/Pengaju/Proposals/Create.vue` (baru)
 
 **Kriteria Selesai:**
-- [ ] Halaman Index menampilkan daftar proposal milik user
-- [ ] Form Create bisa disubmit dan redirect ke Index setelah berhasil
-- [ ] Status ditampilkan sebagai badge berwarna
+- [x] Halaman Index menampilkan daftar proposal milik user
+- [x] Form Create bisa disubmit dan redirect ke Index setelah berhasil
+- [x] Status ditampilkan sebagai badge berwarna
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
