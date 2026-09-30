@@ -831,10 +831,10 @@
 - `resources/js/Components/proposal/DocumentChecklist.vue` (baru)
 
 **Kriteria Selesai:**
-- [ ] Halaman Show menampilkan checklist 11 dokumen dengan status (✅ uploaded / ❌ belum)
-- [ ] Tombol Submit hanya muncul jika semua 11 dokumen sudah ada
+- [x] Halaman Show menampilkan checklist 11 dokumen dengan status (✅ uploaded / ❌ belum)
+- [x] Tombol Submit hanya muncul jika semua 11 dokumen sudah ada
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
