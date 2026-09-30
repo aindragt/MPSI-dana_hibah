@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Pengaju\DashboardController;
 use App\Http\Controllers\Pengaju\ProfileController;
+use App\Http\Controllers\Pengaju\ProposalController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,7 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
             Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
+            Route::resource('proposals', ProposalController::class);
         });
 
     // Admin Kesra Routes

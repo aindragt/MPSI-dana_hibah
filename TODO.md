@@ -758,11 +758,11 @@
 - `routes/web.php` (modify)
 
 **Kriteria Selesai:**
-- [ ] Pengaju bisa membuat proposal baru (tersimpan di DB dengan status `draft`)
-- [ ] Nomor proposal tergenerate otomatis
-- [ ] Tidak bisa buat proposal di luar jendela pengajuan
+- [x] Pengaju bisa membuat proposal baru (tersimpan di DB dengan status `draft`)
+- [x] Nomor proposal tergenerate otomatis
+- [x] Tidak bisa buat proposal di luar jendela pengajuan
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
