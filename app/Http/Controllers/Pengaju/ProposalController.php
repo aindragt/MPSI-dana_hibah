@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Pengaju;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Pengaju\StoreProposalRequest;
+use App\Http\Requests\Pengaju\UpdateProposalRequest;
+use App\Models\DocumentType;
 use App\Models\Proposal;
 use App\Services\ProposalService;
 use App\States\ProposalStatus\Draft;
@@ -82,5 +84,61 @@ class ProposalController extends Controller
 
         return redirect()->route('pengaju.proposals.index')
             ->with('success', 'Proposal berhasil dibuat dengan status Draft.');
+    }
+
+    /**
+     * Display the specified proposal along with documents checklist.
+     */
+    public function show(Proposal $proposal): Response
+    {
+        $this->authorize('view', $proposal);
+
+        $proposal->load([
+            'submissionWindow',
+            'documents.documentType',
+            'documents.verifications',
+            'revisionNotes.creator',
+            'statusLogs.user',
+        ]);
+
+        $documentTypes = DocumentType::orderBy('sort_order')->get();
+
+        return Inertia::render('Pengaju/Proposals/Show', [
+            'proposal' => $proposal,
+            'documentTypes' => $documentTypes,
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified proposal.
+     */
+    public function edit(Proposal $proposal): Response
+    {
+        $this->authorize('update', $proposal);
+
+        return Inertia::render('Pengaju/Proposals/Edit', [
+            'proposal' => $proposal,
+        ]);
+    }
+
+    /**
+     * Update the specified proposal in storage.
+     */
+    public function update(UpdateProposalRequest $request, Proposal $proposal): RedirectResponse
+    {
+        $this->authorize('update', $proposal);
+
+        $validated = $request->validated();
+
+        $proposal->update([
+            'activity_title' => $validated['activity_title'],
+            'activity_description' => $validated['activity_description'] ?? null,
+            'total_budget' => $validated['total_budget'],
+            'execution_start_date' => $validated['execution_start_date'] ?? null,
+            'execution_end_date' => $validated['execution_end_date'] ?? null,
+        ]);
+
+        return redirect()->route('pengaju.proposals.show', $proposal->id)
+            ->with('success', 'Proposal berhasil diperbarui.');
     }
 }

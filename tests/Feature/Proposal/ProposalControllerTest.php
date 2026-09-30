@@ -6,7 +6,9 @@ use App\Models\Proposal;
 use App\Models\Role;
 use App\Models\SubmissionWindow;
 use App\Models\User;
+use App\States\ProposalStatus\Diajukan;
 use App\States\ProposalStatus\Draft;
+use App\States\ProposalStatus\PerluRevisi;
 use Database\Seeders\DocumentTypeSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -130,5 +132,92 @@ class ProposalControllerTest extends TestCase
             ->post(route('pengaju.proposals.store'), $payload);
 
         $response->assertStatus(403);
+    }
+
+    public function test_pengaju_can_view_own_proposal_show_page(): void
+    {
+        $proposal = Proposal::create([
+            'proposal_number' => 'HIBAH-2026-SHOW',
+            'user_id' => $this->pengaju->id,
+            'submission_window_id' => $this->activeWindow->id,
+            'activity_title' => 'Kegiatan Show',
+            'total_budget' => 10000000,
+            'status' => Draft::class,
+        ]);
+
+        $response = $this->actingAs($this->pengaju)
+            ->get(route('pengaju.proposals.show', $proposal->id));
+
+        $response->assertOk();
+    }
+
+    public function test_pengaju_can_edit_and_update_proposal_when_status_is_draft_or_perlu_revisi(): void
+    {
+        $proposal = Proposal::create([
+            'proposal_number' => 'HIBAH-2026-EDIT',
+            'user_id' => $this->pengaju->id,
+            'submission_window_id' => $this->activeWindow->id,
+            'activity_title' => 'Kegiatan Sebelum Edit',
+            'total_budget' => 10000000,
+            'status' => Draft::class,
+        ]);
+
+        $responseEdit = $this->actingAs($this->pengaju)
+            ->get(route('pengaju.proposals.edit', $proposal->id));
+
+        $responseEdit->assertOk();
+
+        $payload = [
+            'activity_title' => 'Kegiatan Setelah Edit',
+            'activity_description' => 'Deskripsi baru',
+            'total_budget' => 12000000,
+        ];
+
+        $responseUpdate = $this->actingAs($this->pengaju)
+            ->put(route('pengaju.proposals.update', $proposal->id), $payload);
+
+        $responseUpdate->assertRedirect(route('pengaju.proposals.show', $proposal->id));
+
+        $this->assertDatabaseHas('proposals', [
+            'id' => $proposal->id,
+            'activity_title' => 'Kegiatan Setelah Edit',
+            'total_budget' => 12000000,
+        ]);
+
+        // Cek juga pada status PerluRevisi
+        $proposal->status = PerluRevisi::class;
+        $proposal->save();
+
+        $responseEdit2 = $this->actingAs($this->pengaju)
+            ->get(route('pengaju.proposals.edit', $proposal->id));
+
+        $responseEdit2->assertOk();
+    }
+
+    public function test_pengaju_cannot_edit_or_update_proposal_when_status_is_not_editable(): void
+    {
+        $proposal = Proposal::create([
+            'proposal_number' => 'HIBAH-2026-LOCKED',
+            'user_id' => $this->pengaju->id,
+            'submission_window_id' => $this->activeWindow->id,
+            'activity_title' => 'Kegiatan Terkunci',
+            'total_budget' => 10000000,
+            'status' => Diajukan::class,
+        ]);
+
+        $responseEdit = $this->actingAs($this->pengaju)
+            ->get(route('pengaju.proposals.edit', $proposal->id));
+
+        $responseEdit->assertStatus(403);
+
+        $payload = [
+            'activity_title' => 'Percobaan Edit Terkunci',
+            'total_budget' => 20000000,
+        ];
+
+        $responseUpdate = $this->actingAs($this->pengaju)
+            ->put(route('pengaju.proposals.update', $proposal->id), $payload);
+
+        $responseUpdate->assertStatus(403);
     }
 }

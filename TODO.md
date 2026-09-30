@@ -806,11 +806,11 @@
 - `app/Http/Requests/Pengaju/UpdateProposalRequest.php` (baru)
 
 **Kriteria Selesai:**
-- [ ] Halaman Show menampilkan detail proposal + checklist dokumen (✅/❌)
-- [ ] Edit hanya bisa dilakukan saat status draft/perlu_revisi
-- [ ] Edit saat status selain draft/perlu_revisi → 403
+- [x] Halaman Show menampilkan detail proposal + checklist dokumen (✅/❌)
+- [x] Edit hanya bisa dilakukan saat status draft/perlu_revisi
+- [x] Edit saat status selain draft/perlu_revisi → 403
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
