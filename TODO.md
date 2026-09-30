@@ -856,12 +856,12 @@
 - `routes/web.php` (modify)
 
 **Kriteria Selesai:**
-- [ ] Pengaju bisa download dokumen milik sendiri
-- [ ] Admin Kesra bisa download semua dokumen proposal
-- [ ] User lain (bukan pemilik/admin) → 403
-- [ ] File di-serve dari disk `local`, BUKAN disk `public`
+- [x] Pengaju bisa download dokumen milik sendiri
+- [x] Admin Kesra bisa download semua dokumen proposal
+- [x] User lain (bukan pemilik/admin) → 403
+- [x] File di-serve dari disk `local`, BUKAN disk `public`
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 

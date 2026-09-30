@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\Pengaju\DashboardController;
 use App\Http\Controllers\Pengaju\ProfileController;
 use App\Http\Controllers\Pengaju\ProposalController;
@@ -39,6 +40,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', [App\Http\Controllers\SuperAdmin\DashboardController::class, 'index'])->name('dashboard');
         });
+
+    // Shared File Routes
+    Route::get('files/proposal-document/{document}', [FileController::class, 'showProposalDocument'])->name('files.proposal-document');
+    Route::get('files/profile/{user}/{field}', [FileController::class, 'showProfileFile'])->name('files.profile');
+    Route::get('files/lpj/{proposal}', [FileController::class, 'showLpj'])->name('files.lpj');
 });
 
 require __DIR__.'/auth.php';
