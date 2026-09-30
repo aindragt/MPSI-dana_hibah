@@ -706,11 +706,11 @@
 - `app/Policies/ProposalPolicy.php` (baru)
 
 **Kriteria Selesai:**
-- [ ] Pengaju bisa create proposal hanya jika jendela aktif dan belum punya proposal aktif tahun ini
-- [ ] Pengaju hanya bisa update proposal berstatus editable (draft/perlu_revisi)
-- [ ] Admin Kesra bisa view semua proposal
+- [x] Pengaju bisa create proposal hanya jika jendela aktif dan belum punya proposal aktif tahun ini
+- [x] Pengaju hanya bisa update proposal berstatus editable (draft/perlu_revisi)
+- [x] Admin Kesra bisa view semua proposal
 
-**Status:** ⬜ Belum Dikerjakan
+**Status:** ✅ Selesai
 
 ---
 
